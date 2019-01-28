@@ -9,4 +9,4 @@ mkdir -p /home/www/php/conf/
 cp my.cnf /home/www/mysql/conf
 cp php.ini /home/www/php/conf/
 cp php-fpm.conf /home/www/php/conf/
-cp mytest.com.conf /home/www/nginx/conf/vhost
+cp home.dc.mytest.com.conf /home/www/nginx/conf/vhost
