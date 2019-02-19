@@ -5,11 +5,10 @@ services:
     ports:
       - "8082:80"
     volumes:
-      #- /windows/www:/usr/share/nginx/html/:rw
-      - /home/www/html:/usr/share/nginx/html/:rw
-      - /home/www/nginx/conf/vhost/:/etc/nginx/conf.d/:ro
-      #- /home/www/nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
-      - /home/www/log/nginx/:/var/log/nginx/:rw
+      - /windows/www:/usr/share/nginx/html/:rw
+      - ./nginx:/etc/nginx/conf.d/:ro
+      #- ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /var/log/nginx/:/var/log/nginx/:rw
     #links:
     #  - php-fpm:fpm
     depends_on:
@@ -21,11 +20,10 @@ services:
     expose:
       - "9000"
     volumes:
-      #- /windows/www:/var/www/html/:rw
-      - /home/www/html:/var/www/html/:rw
-      - /home/www/php/conf/php.ini:/usr/local/etc/php/php.ini:ro
-      - /home/www/php/conf/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf:rw
-      - /home/www/log/php-fpm/:/var/log/php-fpm/:rw
+      - /windows/www:/var/www/html/:rw
+      - ./php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./php/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+      - /var/log/php-fpm/:/var/log/php-fpm/:rw
     networks:
       - lnmp
   mysql:
@@ -33,9 +31,9 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - /home/www/mysql/conf/my.cnf:/etc/mysql/my.cnf:ro
+      - ./mysql/my.cnf:/etc/mysql/my.cnf:ro
       - /home/www/mysql/data:/var/lib/mysql/:rw
-      - /home/www/log/mysql/:/var/log/mysql/:rw
+      - /var/log/mysql/:/var/log/mysql/:rw
       - /home/www/mysql/mysql-files/:/var/lib/mysql-files:rw
     command: --default-authentication-plugin=mysql_native_password
     environment:
