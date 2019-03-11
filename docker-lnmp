@@ -1,0 +1,4 @@
+#!/bin/bash
+# chkconfig: 2345 60 30
+# description: docker-compose start lnmp
+docker-compose -f /windows/www/docker-lnmp/docker-composer.yml up -d

@@ -4,12 +4,19 @@ services:
     image: nginx:alpine
     ports:
       - "80:80"
+      - "8081:8081"
     volumes:
       - /windows/www:/usr/share/nginx/html/:rw
       - ./nginx:/etc/nginx/conf.d/:ro
       #- ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - /var/log/nginx/:/var/log/nginx/:rw
     #privileged: true
+    extra_hosts:
+      - "say-words.qm.com:192.168.88.138"
+      - "rec.qm.com:192.168.88.138"
+      - "admin.qm.com:192.168.88.138"
+      - "www.qm.com:192.168.88.138"
+      - "home.mytest.com:192.168.88.138"
     depends_on:
       - php-fpm
     networks:
@@ -26,6 +33,12 @@ services:
     #privileged: true
     #env_file:
     #  - ./database.env
+    extra_hosts:
+      - "say-words.qm.com:192.168.88.138"
+      - "rec.qm.com:192.168.88.138"
+      - "admin.qm.com:192.168.88.138"
+      - "www.qm.com:192.168.88.138"
+      - "home.mytest.com:192.168.88.138"
     networks:
       - lnmp
 #  mysql:
