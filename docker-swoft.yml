@@ -1,0 +1,15 @@
+version: "3"
+services:
+  swoft:
+    image: swoole
+    ports:
+      - "8090:8090"
+      - "8099:8099"
+    volumes:
+      - "/windows/www/swoft:/var/www/swoft"
+      - "./swoft/php.ini:/usr/local/etc/php/php.ini"
+    networks:
+      - swoft
+    command: ["php","/var/www/swoft/bin/swoft","ws:start"]
+networks:
+  swoft:
