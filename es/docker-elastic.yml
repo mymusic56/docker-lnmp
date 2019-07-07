@@ -1,7 +1,7 @@
 version: '3'
 services:
   es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+    image: es7.1.1-with-ki-icu:latest
     container_name: es01
     environment:
       - node.name=es01
@@ -16,12 +16,14 @@ services:
         hard: -1
     volumes:
       - es7data1:/usr/share/elasticsearch/data
+    extra_hosts:
+      - "home.mytest.com:192.168.152.136"
     ports:
       - 9200:9200
     networks:
       - esnet
   es02:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+    image: es7.1.1-with-ki-icu:latest
     container_name: es02
     environment:
       - node.name=es02
@@ -36,6 +38,8 @@ services:
         hard: -1
     volumes:
       - es7data2:/usr/share/elasticsearch/data
+    extra_hosts:
+      - "home.mytest.com:192.168.152.136"
     networks:
       - esnet
   cerebro:
