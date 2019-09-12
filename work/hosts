@@ -1,0 +1,61 @@
+# 测试2
+
+# 测试环境
+# 渝欧汇
+
+# 127.0.0.1
+
+127.0.0.1  www.yuouhui.staging
+127.0.0.1 passport.yuouhui.staging
+127.0.0.1 user.yuouhui.staging
+127.0.0.1 api.o.xgqqg.staging
+127.0.0.1 cms.a.xgqqg.staging
+127.0.0.1 tpl-admin.xgqqg.staging
+
+# 西港全球购
+127.0.0.1 portal.a.xgqqg.staging
+127.0.0.1 user.xgqqg.staging
+127.0.0.1 p1.d.xgqqg.staging
+127.0.0.1 passport.xgqqg.staging
+127.0.0.1 www.xgqqg.staging
+127.0.0.1 article.xgqqg.staging
+127.0.0.1 topic.xgqqg.staging
+127.0.0.1 m.xgqqg.staging
+127.0.0.1 user.a.xgqqg.staging
+127.0.0.1 shop.a.xgqqg.staging
+127.0.0.1 dxt.a.xgqqg.staging
+127.0.0.1 api.m.xgqqg.staging
+
+# 供应商
+127.0.0.1 supplier.a.xgqqg.staging
+
+# 批量导单
+127.0.0.1 io.a.xgqqg.staging
+
+#库存中心
+127.0.0.1 stock.xgqqg.staging
+127.0.0.1 dev.a.xgqqg.staging
+
+#宝妈大学堂
+127.0.0.1 dxt.a.xgqqg.staging 
+127.0.0.1 dxt.xgqqg.staging 
+
+127.0.0.1 www.nepenthesbaby.cc
+127.0.0.1 user.nepenthesbaby.cc
+127.0.0.1 passport.nepenthesbaby.cc
+
+
+127.0.0.1 www.xyacloud.cc
+127.0.0.1 passport.xyacloud.cc
+127.0.0.1 user.xyacloud.cc
+
+
+127.0.0.1 user.daneng.xgqqg.cc
+127.0.0.1 passport.daneng.xgqqg.cc
+
+127.0.0.1 tradesman.xgqqg.cc
+127.0.0.1 passport.tradesman.xgqqg.cc
+
+127.0.0.1 retailer.xgqqg.staging
+
+127.0.0.1 yzapp.sybabyshop.staging

@@ -22,7 +22,8 @@ services:
     networks:
       - lnmp
   php-fpm:
-    image: swr.cn-north-1.myhuaweicloud.com/engine56/php:1.0.7
+    #image: swr.cn-north-1.myhuaweicloud.com/engine56/php:1.0.7
+    image: myphp7.2:latest
     expose:
       - "9000"
     volumes:
@@ -41,21 +42,21 @@ services:
       - "home.mytest.com:192.168.88.138"
     networks:
       - lnmp
-#  mysql:
-#    image: mysql:latest
-#    ports:
-#      - "3306:3306"
-#    volumes:
-#      - ./mysql/my.cnf:/etc/mysql/my.cnf:ro
-#      - /home/www/mysql/data:/var/lib/mysql/:rw
-#      - /var/log/mysql/:/var/log/mysql/:rw
-#      - /home/www/mysql/mysql-files/:/var/lib/mysql-files:rw
-#    command: --default-authentication-plugin=mysql_native_password
-#    environment:
-#      MYSQL_ROOT_PASSWORD: "123456"
-#    #restart: always
-#    networks:
-#      - lnmp
+  mysql:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/my.cnf:ro
+      - /home/www/mysql/data:/var/lib/mysql/:rw
+      - /var/log/mysql/:/var/log/mysql/:rw
+      - /home/www/mysql/mysql-files/:/var/lib/mysql-files:rw
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+    #restart: always
+    networks:
+      - lnmp
   redis:
     image: myredis:latest
     ports:
@@ -65,19 +66,19 @@ services:
       - /home/www/redis:/data/db:rw
     networks:
       - lnmp
-  mongodb:
-    image: mongo:3.7
-    ports:
-      - "27017:27017"
-    volumes:
-      - ./mongodb:/etc/mongo
-      - /home/www/mongodb:/data/db
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: 123456
-    networks:
-      - lnmp
+#  mongodb:
+#    image: mongo:3.7
+#    ports:
+#      - "27017:27017"
+#    volumes:
+#      - ./mongodb:/etc/mongo
+#      - /home/www/mongodb:/data/db
+#    restart: always
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: admin
+#      MONGO_INITDB_ROOT_PASSWORD: 123456
+#    networks:
+#      - lnmp
 #  nosql-client:
 #    image: mongoclient/mongoclient:2.2.0
 #    restart: always

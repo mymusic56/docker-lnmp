@@ -46,7 +46,7 @@ services:
     image: lmenezes/cerebro:0.8.3
     container_name: cerebro
     ports:
-      - "9000:9000"
+      - "9100:9000"
     command:
       - -Dhosts.0.host=http://es01:9200
     depends_on:
