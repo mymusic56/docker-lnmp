@@ -8,6 +8,17 @@ RUN apt-get update && apt-get install -y \
         zlib1g-dev \
 		openssl \
 		libssl-dev \
+		libicu-dev \
+		libz-dev \
+		inetutils-ping \
+		vim \
+		curl \
+		zip \
+	&& apt-get clean \
+	&& curl -sS https://getcomposer.org/installer | php \
+       && mv composer.phar /usr/local/bin/composer \
+       && composer self-update --clean-backups \
+       && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
 	&& docker-php-ext-install -j$(nproc) bcmath \
 	&& docker-php-ext-install -j$(nproc) exif \
     && docker-php-ext-install -j$(nproc) fileinfo \ 
@@ -22,7 +33,7 @@ RUN apt-get update && apt-get install -y \
 	&& docker-php-ext-install -j$(nproc) shmop \
 	&& pecl install apcu-5.1.16 \
     && pecl install redis-4.2.0 \
-    && pecl install xdebug-2.6.0 \
+    && pecl install xdebug-2.6.1 \
     && pecl install memcached-3.1.3 \
     && pecl install mongodb-1.5.3 \
     && docker-php-ext-enable memcached redis xdebug mongodb
