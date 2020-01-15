@@ -1,0 +1,14 @@
+version: "3"
+services:
+  zentao:
+    image: centos:7.4.1708
+    ports:
+      - "3309:3306"
+      - "8090:80"
+    volumes:
+      - /data/htdocs/zentao:/opt/zbox
+    command: ["/opt/zbox/zbox", "start"]
+    networks:
+      - zentao
+networks:
+  zentao:

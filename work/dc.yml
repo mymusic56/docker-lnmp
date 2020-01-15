@@ -17,6 +17,10 @@ services:
         - "9000:9000"
         # HOST:CONTAINER
     command: fpm
+    extra_hosts:
+      - "api.o.xgqqg.staging.me:192.168.29.143"
+      - "dayouxuan.dn.staging.me:192.168.29.143"
+      - "msg.a.xgqqg.staging:106.75.71.167"
   php-fpm7:
     image: myphp7.2:latest
     container_name: php-fpm7

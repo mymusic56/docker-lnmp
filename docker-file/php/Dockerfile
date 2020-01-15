@@ -15,27 +15,32 @@ RUN apt-get update && apt-get install -y \
 		curl \
 		zip \
 		wget \
+		supervisor \
 	&& apt-get clean \
 RUN curl -sS https://getcomposer.org/installer | php \
        && mv composer.phar /usr/local/bin/composer \
        && composer self-update --clean-backups \
        && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
-	&& docker-php-ext-install -j$(nproc) bcmath \
-	&& docker-php-ext-install -j$(nproc) exif \
-    && docker-php-ext-install -j$(nproc) fileinfo \ 
-    && docker-php-ext-install -j$(nproc) iconv \
+	&& docker-php-ext-install -j$(nproc) \
+	    bcmath \
+	    exif \
+	    fileinfo \
+	    iconv \
+	&& docker-php-ext-configure ldap --with-ldap=/usr/lib/x86_64-linux-gnu
+#	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-stable/openldap-stable-20000129.tgz
+	&& docker-php-ext-install -j$(nproc) ldap \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
 	&& docker-php-ext-install -j$(nproc) gettext \
-	&& docker-php-ext-install -j$(nproc) mysqli \
-	&& docker-php-ext-install -j$(nproc) opcache \
-	&& docker-php-ext-install -j$(nproc) pcntl \
-	&& docker-php-ext-install -j$(nproc) pdo_mysql \
-	&& docker-php-ext-install -j$(nproc) shmop \
+	    mysqli \
+	    pdo_mysql \
+	    opcache \
+	    pcntl \
+	    shmop \
 	&& pecl install apcu-5.1.16 \
-    && pecl install redis-4.2.0 \
-    && pecl install xdebug-2.6.1 \
-    && pecl install memcached-3.1.3 \
-    && pecl install mongodb-1.5.3 \
-    && docker-php-ext-enable memcached redis xdebug mongodb
-RUN usermod -u 1002 www-data
+	    redis-4.2.0 \
+	    xdebug-2.6.1 \
+	    memcached-3.1.3 \
+	    mongodb-1.5.3 \
+    && docker-php-ext-enable apcu redis xdebug memcached mongodb
+WORKDIR /data/htdocs
