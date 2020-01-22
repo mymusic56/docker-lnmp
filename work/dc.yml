@@ -66,6 +66,13 @@ services:
         - /data/htdocs/conf/redis/redis.conf:/etc/redis/redis.conf
         - /data/var/redis:/data/db:rw
 #    command: server
+  beanstalkd:
+    image: beanstalkd:1.11
+    container_name: beanstalkd
+    ports:
+      - "11300:11300"
+    volumes:
+      - /data/var/beanstalkd/:/data
   mysql:
     image: mysql:5.6
     container_name: mysql5.6
