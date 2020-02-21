@@ -1,0 +1,11 @@
+FROM xg.cc/php-fpm:5.5
+RUN apt-get install -y \
+		vim \
+		curl \
+		zip \
+		wget \
+	&& apt-get clean
+ADD ./composer.phar /tmp/composer.phar
+RUN mv composer.phar /usr/local/bin/composer \
+       && composer self-update --clean-backups \
+       && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/

@@ -17,6 +17,10 @@ services:
         - "9000:9000"
         # HOST:CONTAINER
     command: fpm
+    extra_hosts:
+      - "api.o.xgqqg.staging.me:192.168.29.143"
+      - "dayouxuan.dn.staging.me:192.168.29.143"
+      - "msg.a.xgqqg.staging:106.75.71.167"
   php-fpm7:
     image: myphp7.2:latest
     container_name: php-fpm7
@@ -62,6 +66,13 @@ services:
         - /data/htdocs/conf/redis/redis.conf:/etc/redis/redis.conf
         - /data/var/redis:/data/db:rw
 #    command: server
+  beanstalkd:
+    image: beanstalkd:1.11
+    container_name: beanstalkd
+    ports:
+      - "11300:11300"
+    volumes:
+      - /data/var/beanstalkd/:/data
   mysql:
     image: mysql:5.6
     container_name: mysql5.6
