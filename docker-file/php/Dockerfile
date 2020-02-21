@@ -1,41 +1,69 @@
 FROM php:7.2-fpm
+ADD sources.list /etc/apt/
+ADD composer.phar /tmp/
 RUN apt-get update && apt-get install -y \
+        libxslt-dev \
+        libtinfo5 \
+        libreadline7 \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
 		libmcrypt-dev \
+		libsasl2-2 \
+		libsasl2-dev \
         libmemcached-dev \
         libpng-dev \
-        zlib1g-dev \
+        freetds-bin \
+        freetds-dev \
+        freetds-common \
 		openssl \
-		libssl-dev \
+		libbz2-dev \
+		libyaml-dev \
 		libicu-dev \
 		libz-dev \
-		inetutils-ping \
+		libzip-dev \
+		net-tools \
+		iputils-ping \
 		vim \
 		curl \
 		zip \
 		wget \
-	&& apt-get clean \
-RUN curl -sS https://getcomposer.org/installer | php \
-       && mv composer.phar /usr/local/bin/composer \
-       && composer self-update --clean-backups \
-       && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
-	&& docker-php-ext-install -j$(nproc) bcmath \
-	&& docker-php-ext-install -j$(nproc) exif \
-    && docker-php-ext-install -j$(nproc) fileinfo \ 
-    && docker-php-ext-install -j$(nproc) iconv \
+		gnupg-agent \
+        gnupg \
+	&& apt-get clean && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
+    && mv /tmp/composer.phar /usr/local/bin/composer \
+    && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
+    && docker-php-ext-install -j$(nproc) bcmath \
+        bz2 \
+        calendar \
+        dba \
+        exif \
+        intl \
+        gd \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd \
-	&& docker-php-ext-install -j$(nproc) gettext \
-	&& docker-php-ext-install -j$(nproc) mysqli \
-	&& docker-php-ext-install -j$(nproc) opcache \
-	&& docker-php-ext-install -j$(nproc) pcntl \
-	&& docker-php-ext-install -j$(nproc) pdo_mysql \
-	&& docker-php-ext-install -j$(nproc) shmop \
-	&& pecl install apcu-5.1.16 \
-    && pecl install redis-4.2.0 \
-    && pecl install xdebug-2.6.1 \
-    && pecl install memcached-3.1.3 \
-    && pecl install mongodb-1.5.3 \
-    && docker-php-ext-enable memcached redis xdebug mongodb
-RUN usermod -u 1002 www-data
+    && docker-php-ext-install -j$(nproc) gettext \
+        opcache \
+        pcntl \
+        pdo \
+        mysqli \
+        pdo_mysql \
+        pdo_dblib \
+#        pdo_pgsql
+        shmop \
+        soap \
+        sockets \
+        sysvmsg \
+        sysvsem \
+        sysvshm \
+#        tidy \
+#        wddx \
+#        xmlrpc \
+        xsl \
+        zip \
+    && pecl install apcu \
+        redis \
+        xdebug
+        memcached \
+        mongodb \
+        yaml \
+    && docker-php-ext-enable memcached redis xdebug mongodb yaml
+WORKDIR /data/htdocs

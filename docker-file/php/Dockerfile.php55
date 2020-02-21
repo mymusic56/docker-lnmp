@@ -1,0 +1,10 @@
+FROM xg.cc/php-fpm:5.5
+RUN apt-get install -y \
+		inetutils-ping \
+		vim
+# 单独下载composer，在build镜像时下载失败
+# curl -sS https://getcomposer.org/installer | php
+ADD composer.phar /tmp/composer.phar
+RUN mv /tmp/composer.phar /usr/local/bin/composer \
+       && composer self-update --clean-backups \
+       && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
