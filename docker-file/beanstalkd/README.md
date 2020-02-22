@@ -15,3 +15,5 @@
 # -h       show this help
 ```
 Dockerfile参考： https://hub.docker.com/r/uretgec/beanstalkd-alpine/dockerfile
+
+镜像源： https://developer.aliyun.com/mirror/alpine

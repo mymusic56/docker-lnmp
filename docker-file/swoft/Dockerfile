@@ -59,7 +59,7 @@ RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz 
 RUN  composer config -g repo.packagist composer https://packagist.laravel-china.org
 
 # 设置用户和宿主机相同
-RUN usermod -u 1002 www-data
+RUN groupadd www -g 9002 && useradd -s /sbin/nologin -u 9002 -g www www
 
 ADD . /var/www/swoft
 #设置工作目录
