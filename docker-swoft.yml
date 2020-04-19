@@ -1,15 +1,27 @@
 version: "3"
 services:
-  swoft:
-    image: swoole
+  swoole_test_01:
+    container_name: swoole_test_01
+    image: swoole4.4:1.0.1
     ports:
-      - "8090:8090"
-      - "8099:8099"
+      - "18306:18306"
+      - "18307:18307"
+      - "18308:18308"
+      - "18309:18309"
+      - "18310:18310"
     volumes:
-      - "/windows/www/swoft:/var/www/swoft"
-      - "./swoft/php.ini:/usr/local/etc/php/php.ini"
-    networks:
-      - swoft
-    command: ["php","/var/www/swoft/bin/swoft","ws:start"]
+      - "/data/htdocs:/data/htdocs"
+    command: ["/data/htdocs/swoft/swoftcli", "serve:run", "/data/htdocs/swoft/swoft-2.0.8","http:start"]
+
 networks:
-  swoft:
+#  swoft_test:
+#    driver: bridge
+#    ipam:
+#      driver: default
+#      config:
+#      - subnet: 172.18.0.0/16
+#        gateway: 172.18.0.1
+  # 使用已存在的网络
+  default:
+    external:
+      name: conf_default
