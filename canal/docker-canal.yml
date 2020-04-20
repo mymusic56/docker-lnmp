@@ -4,32 +4,69 @@ services:
     image: canal/canal-server:v1.1.4
     container_name: canal-server
     volumes:
-      - /data/var/log/canal:/home/admin/canal-server/logs
+      - /data/var/log/canal-server:/home/admin/canal-server/logs
     environment:
+      - canal.auto.scan=false
+      - canal.destinations=test
       ## mysql serverId
-      - canal.instance.mysql.slaveId = 1234
-      #position info，需要改成自己的数据库信息
-      - canal.instance.master.address = 127.0.0.1:3306
-      #- canal.instance.master.journal.name =
-      #- canal.instance.master.position =
-      #- canal.instance.master.timestamp =
-      #- canal.instance.standby.address =
-      #- canal.instance.standby.journal.name =
-      #- canal.instance.standby.position =
-      #- canal.instance.standby.timestamp =
+      - canal.instance.mysql.slaveId=1234
       #username/password，需要改成自己的数据库信息
       - canal.instance.dbUsername=canal
-      - canal.instance.dbPassword=canal
+      - canal.instance.dbPassword=123456
       - canal.instance.tsdb.enable=true
       - canal.instance.connectionCharset=UTF-8
+      - canal.instance.gtidon=false
+      - canal.instance.filter.regex=.*\\..*
+      ##position info，需要改成自己的数据库信息， 不指定任何信息：默认从当前数据库的位点，进行启动
+      - canal.instance.master.address=mysql5.6:3306
+      - canal.instance.master.journal.name=mysql-bin.000054
+      - canal.instance.master.position=4286
+      #      - canal.instance.master.timestamp=
+      #      - canal.instance.standby.address=
+      #      - canal.instance.standby.journal.name=
+      #      - canal.instance.standby.position=
+      #      - canal.instance.standby.timestamp=
       #admin管理指令链接的ACL配置 (v1.1.4新增)
-      - canal.admin.manager=192.168.29.143
-      - canal.admin.port=11110
-      - canal.admin.user=admin
-      - canal.admin.passwd=123456
+      # 使用时提示：Missing request header 'user' for method parameter of type String？？
+#      - canal.admin.manager=canal-admin:8089
+#      - canal.admin.port=11110
+#      - canal.admin.user=admin
+#      - canal.admin.passwd=6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9
+      # admin auto register
+#      - canal.admin.register.auto=true
+#      - canal.admin.register.cluster=
+    ports:
+      - 9100:9100
+      - 11110:11110
+      - 11111:11111
+      - 11112:11112
+    depends_on:
+      - canal-admin
+    # docker swarm 可以使用deploy
     deploy:
       resources:
         limits:
           memory: 4096m
-    networks:
-      - docker-lnmp_lnmp
+  canal-admin:
+    image: canal/canal-admin:v1.1.4
+    container_name: canal-admin
+    volumes:
+      - /data/var/log/canal-admin:/home/admin/canal-admin/logs
+    environment:
+      - server.port=8089
+      - spring.datasource.address=mysql5.6:3306
+      - spring.datasource.database=canal_manager
+      - spring.datasource.username=root
+      - spring.datasource.password=123456
+      - canal.adminUser=admin
+      - canal.adminPasswd=123456
+    ports:
+      - 8089:8089
+    deploy:
+      resources:
+        limits:
+          memory: 4096m
+networks:
+  default:
+    external:
+      name: conf_default

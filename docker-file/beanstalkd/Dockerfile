@@ -3,10 +3,11 @@ LABEL maintainer="961272668@qq.com"
 
 ENV VERSION="1.11"
 
-RUN addgroup -S beanstalkd && adduser -S -G beanstalkd beanstalkd
-RUN apk add --no-cache 'su-exec>=0.2'
-
-RUN apk --update add --virtual build-dependencies \
+#修改成阿里云镜像
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+  && addgroup -S beanstalkd && adduser -S -G beanstalkd beanstalkd \
+  && apk add --no-cache 'su-exec>=0.2' \
+  && apk --update add --virtual build-dependencies \
   gcc \
   make \
   musl-dev \
@@ -18,9 +19,8 @@ RUN apk --update add --virtual build-dependencies \
   && cp beanstalkd /usr/bin \
   && apk del build-dependencies \
   && rm -rf /tmp/* \
-  && rm -rf /var/cache/apk/*
-
-RUN mkdir /data && chown beanstalkd:beanstalkd /data
+  && rm -rf /var/cache/apk/* \
+  && mkdir /data && chown beanstalkd:beanstalkd /data
 VOLUME ["/data"]
 EXPOSE 11300
 

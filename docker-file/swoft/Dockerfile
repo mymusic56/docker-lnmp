@@ -1,13 +1,12 @@
 FROM php:7.3
-# Version
-ENV PHPREDIS_VERSION 4.0.0
-ENV SWOOLE_VERSION 4.3.3
+
+ADD sources.list /etc/apt/
+ADD composer.phar /tmp/
 
 # Timezone
 RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo 'Asia/Shanghai' > /etc/timezone
-
-# Libs
+    # Libs
 RUN apt-get update \
     && apt-get install -y \
         curl \
@@ -19,29 +18,23 @@ RUN apt-get update \
         libssl-dev \
         libnghttp2-dev \
         libpcre3-dev \
-    && apt-get clean \
-    && apt-get autoremove
+    && apt-get clean
+# Version
+ENV PHPREDIS_VERSION 5.1.1
+ENV SWOOLE_VERSION 4.4.16
 
-# Composer
-RUN curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer \
-    && composer self-update --clean-backups
-
-# docker方式安装PDO extension
-RUN docker-php-ext-install pdo_mysql
-
-# Bcmath extension
-RUN docker-php-ext-install bcmath
-
-# Redis extension
-RUN wget http://pecl.php.net/get/redis-${PHPREDIS_VERSION}.tgz -O /tmp/redis.tar.tgz \
-    && pecl install /tmp/redis.tar.tgz \
-    && rm -rf /tmp/redis.tar.tgz \
-    && docker-php-ext-enable redis
- # 修改php.ini的文件 extension=redis.so
-
-# Swoole extension
-RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz \
+    # composer
+RUN mv /tmp/composer.phar /usr/local/bin/composer \
+    && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
+    && docker-php-ext-install pdo_mysql bcmath \
+            sockets \
+            sysvmsg \
+            sysvsem \
+            sysvshm \
+    && pecl install redis-${PHPREDIS_VERSION} \
+    && docker-php-ext-enable redis \
+    # Swoole extension
+    && wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz \
     && mkdir -p swoole \
     && tar -xf swoole.tar.gz -C swoole --strip-components=1 \
     && rm swoole.tar.gz \
@@ -53,22 +46,11 @@ RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz 
         && make install \
     ) \
     && rm -r swoole \
-    && docker-php-ext-enable swoole
+    && docker-php-ext-enable redis swoole
 
-#切换镜像
-RUN  composer config -g repo.packagist composer https://packagist.laravel-china.org
-
-# 设置用户和宿主机相同
-RUN usermod -u 1002 www-data
-
-ADD . /var/www/swoft
 #设置工作目录
+WORKDIR /data/htdocs/
 
-WORKDIR /var/www/swoft
-
-EXPOSE 8090
-EXPOSE 8099
-
-ENTRYPOINT ["php", "/var/www/swoft/bin/swoft", "start"]
+#可以使用官方提供的安装包，里面有更多的工具
 
 

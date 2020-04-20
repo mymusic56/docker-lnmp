@@ -1,0 +1,6 @@
+FROM swoole:4.4.16
+
+RUN docker-php-ext-install sockets \
+   sysvmsg \
+   sysvsem \
+   sysvshm

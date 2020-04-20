@@ -1,46 +1,76 @@
 FROM php:7.2-fpm
+ADD sources.list /etc/apt/
+ADD composer.phar /tmp/
 RUN apt-get update && apt-get install -y \
+        libxslt-dev \
+        libtinfo5 \
+        libreadline7 \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
 		libmcrypt-dev \
+		libsasl2-2 \
+		libsasl2-dev \
         libmemcached-dev \
         libpng-dev \
-        zlib1g-dev \
+        libfreetype6 \
+        libfreetype6-dev \
+        freetds-bin \
+        freetds-dev \
+        freetds-common \
 		openssl \
-		libssl-dev \
+		libbz2-dev \
+		libyaml-dev \
 		libicu-dev \
 		libz-dev \
-		inetutils-ping \
+		libzip-dev \
+		net-tools \
+		iputils-ping \
 		vim \
 		curl \
 		zip \
 		wget \
-		supervisor \
-	&& apt-get clean \
-RUN curl -sS https://getcomposer.org/installer | php \
-       && mv composer.phar /usr/local/bin/composer \
-       && composer self-update --clean-backups \
-       && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
-	&& docker-php-ext-install -j$(nproc) \
-	    bcmath \
-	    exif \
-	    fileinfo \
-	    iconv \
-	&& docker-php-ext-configure ldap --with-ldap=/usr/lib/x86_64-linux-gnu
-#	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-stable/openldap-stable-20000129.tgz
-	&& docker-php-ext-install -j$(nproc) ldap \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+		gnupg-agent \
+        gnupg \
+	&& apt-get clean && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
+    && mv /tmp/composer.phar /usr/local/bin/composer \
+    && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
+RUN docker-php-ext-install -j$(nproc) bcmath \
+        bz2 \
+        calendar \
+        dba \
+        exif \
+        intl \
+    && docker-php-ext-configure gd \
+        --with-png-dir=/usr/include \
+        --with-jpeg-dir=/usr/include/ \
+        --with-freetype-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
-	&& docker-php-ext-install -j$(nproc) gettext \
-	    mysqli \
-	    pdo_mysql \
-	    opcache \
-	    pcntl \
-	    shmop \
-	&& pecl install apcu-5.1.16 \
-	    redis-4.2.0 \
-	    xdebug-2.6.1 \
-	    memcached-3.1.3 \
-	    mongodb-1.5.3 \
-    && docker-php-ext-enable apcu redis xdebug memcached mongodb
+        gettext \
+        opcache \
+        pcntl \
+        pdo \
+        mysqli \
+        pdo_mysql \
+        pdo_dblib \
+#        pdo_pgsql
+        shmop \
+        soap \
+        sockets \
+        sysvmsg \
+        sysvsem \
+        sysvshm \
+#        tidy \
+#        wddx \
+#        xmlrpc \
+        xsl \
+        zip \
+    && pecl install apcu \
+        redis \
+        xdebug
+        memcached \
+        mongodb \
+        yaml \
+    && docker-php-ext-enable memcached redis xdebug mongodb yaml
+#创建用户，让宿主机和容器用户相同，也可以在宿主机创建www-data用户，gid=33,uid=33
+#RUN groupadd www -g 9002 && useradd -s /sbin/nologin -u 9002 -g www www
 WORKDIR /data/htdocs
