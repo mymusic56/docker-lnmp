@@ -9,6 +9,7 @@ RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     # Libs
 RUN apt-get update \
     && apt-get install -y \
+        apt-utils \
         curl \
         vim  \
         wget \
@@ -25,6 +26,7 @@ ENV SWOOLE_VERSION 4.4.16
 
     # composer
 RUN mv /tmp/composer.phar /usr/local/bin/composer \
+    && chmod 755 /usr/local/bin/composer \
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
     && docker-php-ext-install pdo_mysql bcmath \
             sockets \
@@ -32,7 +34,6 @@ RUN mv /tmp/composer.phar /usr/local/bin/composer \
             sysvsem \
             sysvshm \
     && pecl install redis-${PHPREDIS_VERSION} \
-    && docker-php-ext-enable redis \
     # Swoole extension
     && wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz \
     && mkdir -p swoole \
