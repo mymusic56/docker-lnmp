@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y \
         gnupg \
 	&& apt-get clean && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
     && mv /tmp/composer.phar /usr/local/bin/composer \
+    && chmod 755 /usr/local/bin/composer \
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 RUN docker-php-ext-install -j$(nproc) bcmath \
         bz2 \
