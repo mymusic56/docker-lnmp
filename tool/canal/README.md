@@ -1,28 +1,41 @@
-```bash
-docker pull canal/canal-server:v1.1.4
-docker pull canal/canal-admin:v1.1.4
-```
+https://github.com/alibaba/canal/wiki/QuickStart
 
-```bash
-sh run.sh -e canal.auto.scan=false \
--e canal.destinations=test \
--e canal.instance.master.address=127.0.0.1:3306  \
--e canal.instance.dbUsername=canal  \
--e canal.instance.dbPassword=123456  \
--e canal.instance.connectionCharset=UTF-8 \
--e canal.instance.tsdb.enable=true \
--e canal.instance.gtidon=false
-```
+https://github.com/alibaba/canal/blob/master/docker/run.sh
 
-canal 1.1.4版本，迎来最重要的WebUI能力，引入canal-admin工程，支持面向WebUI的canal动态管理能力，支持配置、任务、日志等在线白屏运维能力
 ```
-sh  run_admin.sh -e server.port=8089 \
--e spring.datasource.address=127.0.0.1:3306 \
--e spring.datasource.database=canal_manager \
--e spring.datasource.username=canal \
--e spring.datasource.password=123456 \
--e canal.adminUser=admin \
--e canal.adminPasswd=admin
+docker run -d -it -h 192.168.29.143 \
+    -e canal.admin.manager=mysql5.6:3306 \
+    -e canal.admin.port=11110 \
+    -e canal.admin.user=admin \
+    -e canal.admin.passwd=123456 \
+    --name=canal-server \
+    --net=docker-lnmp_lnmp \
+    -m 4096m \
+    canal/canal-server:v1.1.4
+    
+    
+    
+./run.sh -e canal.admin.manager=127.0.0.1:8089 \
+         -e canal.admin.port=11110 \
+         -e canal.admin.user=admin \
+         -e canal.admin.passwd=123456
+         
+docker run --rm -it -h 192.168.29.143 \
+    -e canal.auto.scan=false \
+    -e canal.destinations=test \
+    -e canal.instance.master.address=127.0.0.1:3306 \
+    -e canal.instance.dbUsername=canal \
+    -e canal.instance.dbPassword=123456 \
+    -e canal.instance.connectionCharset=UTF-8 \
+    -e canal.instance.tsdb.enable=true \
+    -e canal.instance.gtidon=false \
+    --net=docker-lnmp_lnmp \
+    --name=canal-server \
+    --net=docker-lnmp_lnmp \
+    -m 4096m \
+    -p 11110:11110 \
+    -p 11111:11111 \
+    -p 11112:11112 \
+    -p 9100:9100  \
+    canal/canal-server
 ```
-
-WARNING: Published ports are discarded when using host network mode

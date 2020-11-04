@@ -94,9 +94,9 @@ elif [ "$1" == "help" ] ; then
 fi
 
 
-VERSION=v1.1.4
+
 MEMORY="-m 4096m"
 LOCALHOST=`getMyIp`
-cmd="docker run -d -it -h $LOCALHOST $CONFIG --name=canal-server $VOLUMNS $NET_MODE $PORTS $MEMORY canal/canal-server:$VERSION"
+cmd="docker run -d -it -h $LOCALHOST $CONFIG --name=canal-server $VOLUMNS $NET_MODE $PORTS $MEMORY canal/canal-server"
 echo $cmd
 eval $cmd

@@ -1,0 +1,47 @@
+version: "3"
+services:
+  Sowft-GetWay:
+    image: swoole:1.0.0
+    container_name: Sowft-GetWay
+    #    restart: always
+    volumes:
+      - /data/htdocs/:/data/htdocs:rw # nocopy is important
+    ports:
+      - "18306:18306"
+    command: php /data/htdocs/swoft-service-group/getway/swoftcli run -c http:start -b swoft-service-group/getway/bin/swoft --watch swoft-service-group/getway/app,swoft-service-group/getway,swoft-service-group/getway/config
+    extra_hosts:
+      - "hzmdb.staging.me:192.168.29.144"
+  Sowft-User:
+    image: swoole:1.0.0
+    container_name: Sowft-User
+    #    restart: always
+    volumes:
+      - /data/htdocs/:/data/htdocs:rw # nocopy is important
+    ports:
+      - "18307:18306"
+    command: php /data/htdocs/swoft-service-group/user/swoftcli run -c http:start -b swoft-service-group/user/bin/swoft --watch swoft-service-group/user/app,swoft-service-group/user,swoft-service-group/user/config
+    extra_hosts:
+      - "hzmdb.staging.me:192.168.29.144"
+  Sowft-Goods:
+    image: swoole:1.0.0
+    container_name: Sowft-Goods
+    #    restart: always
+    volumes:
+      - /data/htdocs/:/data/htdocs:rw # nocopy is important
+    ports:
+      - "18308:18306"
+    command: php /data/htdocs/swoft-service-group/goods/swoftcli run -c http:start -b swoft-service-group/goods/bin/swoft --watch swoft-service-group/goods/app,swoft-service-group/goods,swoft-service-group/goods/config
+    extra_hosts:
+      - "hzmdb.staging.me:192.168.29.144"
+networks:
+#  swoft_test:
+#    driver: bridge
+#    ipam:
+#      driver: default
+#      config:
+#      - subnet: 172.18.0.0/16
+#        gateway: 172.18.0.1
+  # 使用已存在的网络
+  default:
+    external:
+      name: conf_default

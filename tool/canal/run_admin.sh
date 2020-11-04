@@ -42,6 +42,7 @@ function getMyIp() {
 }
 
 CONFIG=${@:1}
+#VOLUMNS="-v $DATA:/home/admin/canal-admin/logs"
 PORTLIST="8089"
 PORTS=""
 for PORT in $PORTLIST ; do
@@ -73,8 +74,6 @@ case "`uname`" in
 esac
 BASE=${bin_abs_path}
 DATA="$BASE/data"
-VOLUMNS="-v /data/var/canal-admin/logs/:/home/admin/canal-admin/logs"
-
 mkdir -p $DATA
 
 if [ $# -eq 0 ]; then
@@ -84,9 +83,9 @@ elif [ "$1" == "-h" ] ; then
 elif [ "$1" == "help" ] ; then
     usage
 fi
-VERSION=v1.1.4
+
 MEMORY="-m 1024m"
 LOCALHOST=`getMyIp`
-cmd="docker run -d -it -h $LOCALHOST $CONFIG --name=canal-admin $VOLUMNS $NET_MODE $PORTS $MEMORY canal/canal-admin:$VERSION"
+cmd="docker run -d -it -h $LOCALHOST $CONFIG --name=canal-admin $VOLUMNS $NET_MODE $PORTS $MEMORY canal/canal-admin:v1.1.4"
 echo $cmd
 eval $cmd

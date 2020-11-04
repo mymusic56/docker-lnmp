@@ -17,7 +17,7 @@ services:
     volumes:
       - es7data1:/usr/share/elasticsearch/data
     extra_hosts:
-      - "home.mytest.com:192.168.152.136"
+      - "home.mytest.com:192.168.76.21"
     ports:
       - 9200:9200
     networks:
@@ -39,7 +39,7 @@ services:
     volumes:
       - es7data2:/usr/share/elasticsearch/data
     extra_hosts:
-      - "home.mytest.com:192.168.152.136"
+      - "home.mytest.com:192.168.76.21"
     networks:
       - esnet
   cerebro:

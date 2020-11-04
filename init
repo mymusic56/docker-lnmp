@@ -1,4 +1,0 @@
-mkdir -p /home/www/mysql/data
-mkdir -p /home/www/mysql
-mkdir -p /home/www/redis
-mkdir -p /home/www/mongodb

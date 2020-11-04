@@ -46,7 +46,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - /data/htdocs/docker-lnmp/mysql/my.56.cnf:/etc/mysql/my.cnf:ro
+      - /data/htdocs/docker-lnmp/db/mysql/my.56.cnf:/etc/mysql/my.cnf:ro
       - /data/var/mysql5.6/data:/var/lib/mysql/:rw
       - /var/log/mysql5.6/:/var/log/mysql/:rw
       - /data/var/mysql5.6/mysql-files/:/var/lib/mysql-files:rw
@@ -59,7 +59,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - /data/htdocs/docker-lnmp/mysql/my-slave.56.cnf:/etc/mysql/my.cnf:ro
+      - /data/htdocs/docker-lnmp/db/mysql/my-slave.56.cnf:/etc/mysql/my.cnf:ro
       - /data/var/mysql5.6-slave/data:/var/lib/mysql/:rw
       - /var/log/mysql5.6-slave/:/var/log/mysql/:rw
       - /data/var/mysql5.6-slave/mysql-files/:/var/lib/mysql-files:rw
@@ -68,6 +68,22 @@ services:
       MYSQL_ROOT_PASSWORD: "123456"
     extra_hosts:
       - "master.mysql.me:192.168.29.143"
+
+  rabbitmq37:
+    image: rabbitmq:3.7.24-management
+    container_name: rabbit3.7-m
+    ports:
+      - "15671:15671"
+      - "15672:15672"
+      - "25672:25672"
+      - "4369:4369"
+      - "5671:5671"
+      - "5672:5672"
+    volumes:
+      - /data/var/rabbitmq37/:/var/lib/rabbitmq/
+      - /data/htdocs/docker-lnmp/queue/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - /data/var/log/rabbitmq/:/var/log/rabbitmq/
+
   redis-master:
     image: redis:latest
     container_name: redis-master
@@ -75,7 +91,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - /data/htdocs/conf/redis/:/etc/redis/
+      - /data/htdocs/queue/redis/:/etc/redis/
       - /data/var/redis-master:/data/db:rw
     command: redis-server /etc/redis/redis-master.conf
   redis-slave:
