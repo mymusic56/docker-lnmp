@@ -1,7 +1,7 @@
 version: '3'
 services:
   es01:
-    image: es7.1.1-with-ki-icu:latest
+    image: es7.1.1-with-ik-icu-pinyin:latest
     container_name: es01
     environment:
       - node.name=es01
@@ -23,7 +23,7 @@ services:
     networks:
       - esnet
   es02:
-    image: es7.1.1-with-ki-icu:latest
+    image: es7.1.1-with-ik-icu-pinyin:latest
     container_name: es02
     environment:
       - node.name=es02
