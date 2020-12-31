@@ -20,10 +20,6 @@ RUN apt-get update \
         libnghttp2-dev \
         libpcre3-dev \
     && apt-get clean
-# Version
-ENV PHPREDIS_VERSION 5.1.1
-ENV SWOOLE_VERSION 4.4.16
-
     # composer
 RUN mv /tmp/composer.phar /usr/local/bin/composer \
     && chmod 755 /usr/local/bin/composer \
@@ -32,10 +28,14 @@ RUN mv /tmp/composer.phar /usr/local/bin/composer \
             sockets \
             sysvmsg \
             sysvsem \
-            sysvshm \
-    && pecl install redis-${PHPREDIS_VERSION} \
+            sysvshm
+ENV PHPREDIS_VERSION 5.1.1
+RUN pecl install redis-${PHPREDIS_VERSION} \
+    && docker-php-ext-enable redis
+
+ENV SWOOLE_VERSION 4.5.10
     # Swoole extension
-    && wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz \
+RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz \
     && mkdir -p swoole \
     && tar -xf swoole.tar.gz -C swoole --strip-components=1 \
     && rm swoole.tar.gz \
@@ -47,7 +47,7 @@ RUN mv /tmp/composer.phar /usr/local/bin/composer \
         && make install \
     ) \
     && rm -r swoole \
-    && docker-php-ext-enable redis swoole
+    && docker-php-ext-enable swoole
 
 #设置工作目录
 WORKDIR /data/htdocs/
