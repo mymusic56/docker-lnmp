@@ -1,0 +1,94 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:1.15.12
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - D:\workspace-PHP:/var/www/html/:rw
+      - D:\workspace-PHP\docker-lnmp\lnmp\nginx\conf-win.d\:/etc/nginx/conf.d/:ro
+      #- /data/htdocs/docker-lnmp/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - G:\data\var\log\nginx/:/var/log/nginx/:rw
+    #privileged: true
+    extra_hosts:
+      - "say-words.qm.com:10.168.1.160"
+      - "rec.qm.com:10.168.1.160"
+      - "admin.qm.com:10.168.1.160"
+      - "www.qm.com:10.168.1.160"
+      - "home.mytest.com:10.168.1.160"
+    depends_on:
+      - php-fpm
+#    networks:
+#      - lnmp
+  php-fpm7:
+    #image: swr.cn-north-1.myhuaweicloud.com/engine56/php:1.0.7
+    image: myphp7.2:latest
+    container_name: php-fpm7
+    expose:
+      - "9000"
+    volumes:
+      - D:\workspace-PHP:/var/www/html/:rw
+      - D:\workspace-PHP\docker-lnmp\lnmp\php\php.ini:/usr/local/etc/php/php.ini:ro
+      - D:\workspace-PHP\docker-lnmp\lnmp\php\php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+      - G:\data\var\log\php-fpm\:/var/log/php-fpm/:rw
+    #privileged: true
+    #env_file:
+    #  - ./php-fpm.env
+    extra_hosts:
+      - "say-words.qm.com:10.168.1.160"
+      - "rec.qm.com:10.168.1.160"
+      - "admin.qm.com:10.168.1.160"
+      - "www.qm.com:10.168.1.160"
+      - "home.mytest.com:10.168.1.160"
+  mysql56:
+    image: mysql:5.6.48
+    container_name: mysql5.6
+    ports:
+      - "3306:3306"
+    volumes:
+      - D:\workspace-PHP\docker-lnmp\db\mysql\my.56.cnf:/etc/mysql/my.cnf:ro
+      - G:\data\var\mysql5.6\data:/var/lib/mysql/:rw
+      - G:\data\var/log/mysql5.6/:/var/log/mysql/:rw
+      - G:\data\var\mysql5.6\mysql-files\:/var/lib/mysql-files:rw
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+
+  rabbitmq37:
+    image: rabbitmq:3.7.24-management
+    container_name: rabbit3.7-m
+    ports:
+      - "15671:15671"
+      - "15672:15672"
+      - "25672:25672"
+      - "4369:4369"
+      - "5671:5671"
+      - "5672:5672"
+    volumes:
+      - G:\data\var\rabbitmq37\:/var/lib/rabbitmq/
+      - D:\workspace-PHP\docker-lnmp\queue\rabbitmq\rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - G:\data\var\log\rabbitmq\:/var/log/rabbitmq/
+
+  redis-master:
+    image: redis:5.0.14
+    container_name: redis-master
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - D:\workspace-PHP\docker-lnmp\queue\redis\:/etc/redis/
+      - G:\data\var\redis-master:/data/db:rw
+    command: redis-server /etc/redis/redis-master.conf
+  redis-slave:
+    image: redis:5.0.14
+    container_name: redis-slave
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+      - D:\workspace-PHP\docker-lnmp\queue\redis\:/etc/redis/
+      - G:\data\var\redis-slave:/data/db:rw
+    command: redis-server /etc/redis/redis-slave.conf
+    depends_on:
+      - redis-master

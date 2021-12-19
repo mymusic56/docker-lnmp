@@ -67,7 +67,7 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
         zip \
     && pecl install apcu \
         redis \
-        xdebug
+        xdebug \
         memcached \
         mongodb \
         yaml \
