@@ -1,3 +1,9 @@
+### 构建ES镜像
+
+```shell
+docker build --rm -t es7.1.1-with-ik-icu-pinyin . 
+```
+
 **logstash导入测试数据**
 
 ```
