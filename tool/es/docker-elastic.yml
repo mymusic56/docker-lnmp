@@ -1,7 +1,7 @@
 version: '3'
 services:
   es01:
-    image: es7.1.1-with-ik-icu-pinyin:latest
+    image: es-with-ik-pinyin:7.17.7
     container_name: es01
     environment:
       - node.name=es01
@@ -16,15 +16,13 @@ services:
         hard: -1
     volumes:
       - es7data01:/usr/share/elasticsearch/data
-    extra_hosts:
-      - "home.mytest.com:192.168.112.129"
     ports:
       - 9200:9200
       - 9300:9300
     networks:
       - esnet
   es02:
-    image: es7.1.1-with-ik-icu-pinyin:latest
+    image: es-with-ik-pinyin:7.17.7
     container_name: es02
     environment:
       - node.name=es02
@@ -39,12 +37,10 @@ services:
         hard: -1
     volumes:
       - es7data02:/usr/share/elasticsearch/data
-    extra_hosts:
-      - "home.mytest.com:192.168.112.129"
     networks:
       - esnet
   cerebro:
-    image: lmenezes/cerebro:0.8.3
+    image: lmenezes/cerebro:0.9.4
     container_name: cerebro
     ports:
       - "9100:9000"
@@ -57,7 +53,7 @@ services:
     networks:
       - esnet
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.1.1
+    image: docker.elastic.co/kibana/kibana:7.17.7
     container_name: kibana7
     environment:
       I18N_LOCALE: "zh-CN"
