@@ -1,0 +1,15 @@
+# 集群名称
+cluster.name: "es-docker-cluster"
+network.host: 0.0.0.0
+# 跨域设置
+http:
+  cors:
+    enabled: true
+    allow-origin: "*"
+# 安全设置
+#xpack:
+#  security:
+#    transport:
+#      ssl:
+#        enabled: true
+#    enabled: true

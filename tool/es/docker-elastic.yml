@@ -5,17 +5,20 @@ services:
     container_name: es01
     environment:
       - node.name=es01
-      - cluster.name=es_cluster
+#      - cluster.name=es_cluster
       - discovery.seed_hosts=es02
       - cluster.initial_master_nodes=es01,es02
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      # 环境变量的配置会覆盖 elasticsearch.yml 中的配置
+#      - "ES_PATH_CONF=/usr/share/elasticsearch/config"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
       - es7data01:/usr/share/elasticsearch/data
+      - /data/htdoc/docker-lnmp/tool/es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - 9200:9200
       - 9300:9300
@@ -26,26 +29,46 @@ services:
     container_name: es02
     environment:
       - node.name=es02
-      - cluster.name=es_cluster
+#      - cluster.name=es_cluster
       - discovery.seed_hosts=es01
       - cluster.initial_master_nodes=es01,es02
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#      - "ES_PATH_CONF=/usr/share/elasticsearch/config"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
       - es7data02:/usr/share/elasticsearch/data
+      - /data/htdoc/docker-lnmp/tool/es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - 9201:9200
+      - 9301:9300
     networks:
       - esnet
-  cerebro:
-    image: lmenezes/cerebro:0.9.4
-    container_name: cerebro
+#  cerebro:
+#    image: lmenezes/cerebro:0.9.4
+#    container_name: cerebro
+#    ports:
+#      - "9100:9000"
+#    command:
+#      - -Dhosts.0.host=http://es01:9200
+#    depends_on:
+#      - es01
+#      - es02
+#    networks:
+#      - esnet
+  elastichq:
+    image: elastichq/elasticsearch-hq:release-v3.5.12
+    container_name: elastichq
+    environment:
+      - HQ_DEFAULT_URL=http://es01:9200
+      - HQ_ENABLE_SSL=false
+      - HQ_VERIFY_CERTS=false
+      - HQ_DEBUG=true
     ports:
-      - "9100:9000"
-    command:
-      - -Dhosts.0.host=http://es01:9200
+      - "5000:5000"
     depends_on:
       - es01
       - es02
