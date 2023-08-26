@@ -19,6 +19,8 @@ services:
     volumes:
       - es7data01:/usr/share/elasticsearch/data
       - /data/htdoc/docker-lnmp/tool/es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - /data/htdoc/docker-lnmp/tool/es/config/ik/IKAnalyzer.cfg.xml:/usr/share/elasticsearch/plugins/analysis-ik/config/IKAnalyzer.cfg.xml
+      - /data/htdoc/docker-lnmp/tool/es/config/ik/custom_dict.txt:/usr/share/elasticsearch/plugins/analysis-ik/config/custom_dict.txt
     ports:
       - 9200:9200
       - 9300:9300
@@ -42,39 +44,41 @@ services:
     volumes:
       - es7data02:/usr/share/elasticsearch/data
       - /data/htdoc/docker-lnmp/tool/es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - /data/htdoc/docker-lnmp/tool/es/config/ik/IKAnalyzer.cfg.xml:/usr/share/elasticsearch/plugins/analysis-ik/config/IKAnalyzer.cfg.xml
+      - /data/htdoc/docker-lnmp/tool/es/config/ik/custom_dict.txt:/usr/share/elasticsearch/plugins/analysis-ik/config/custom_dict.txt
     ports:
       - 9201:9200
       - 9301:9300
     networks:
       - esnet
-#  cerebro:
-#    image: lmenezes/cerebro:0.9.4
-#    container_name: cerebro
-#    ports:
-#      - "9100:9000"
-#    command:
-#      - -Dhosts.0.host=http://es01:9200
-#    depends_on:
-#      - es01
-#      - es02
-#    networks:
-#      - esnet
-  elastichq:
-    image: elastichq/elasticsearch-hq:release-v3.5.12
-    container_name: elastichq
-    environment:
-      - HQ_DEFAULT_URL=http://es01:9200
-      - HQ_ENABLE_SSL=false
-      - HQ_VERIFY_CERTS=false
-      - HQ_DEBUG=true
+  cerebro:
+    image: lmenezes/cerebro:0.9.4
+    container_name: cerebro
     ports:
-      - "5000:5000"
+      - "9100:9000"
+    command:
+      - -Dhosts.0.host=http://es01:9200
     depends_on:
       - es01
       - es02
-#    restart: always
     networks:
       - esnet
+#  elastichq:
+#    image: elastichq/elasticsearch-hq:release-v3.5.12
+#    container_name: elastichq
+#    environment:
+#      - HQ_DEFAULT_URL=http://es01:9200
+#      - HQ_ENABLE_SSL=false
+#      - HQ_VERIFY_CERTS=false
+#      - HQ_DEBUG=true
+#    ports:
+#      - "5000:5000"
+#    depends_on:
+#      - es01
+#      - es02
+#    restart: always
+#    networks:
+#      - esnet
   kibana:
     image: docker.elastic.co/kibana/kibana:7.17.7
     container_name: kibana7
