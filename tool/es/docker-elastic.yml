@@ -18,10 +18,10 @@ services:
         hard: -1
     volumes:
       - es7data01:/usr/share/elasticsearch/data
-      - /data/htdoc/docker-lnmp/tool/es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - /data/htdoc/docker-lnmp/tool/es/config/ik/IKAnalyzer.cfg.xml:/usr/share/elasticsearch/plugins/analysis-ik/config/IKAnalyzer.cfg.xml
-      - /data/htdoc/docker-lnmp/tool/es/config/ik/custom_dict.txt:/usr/share/elasticsearch/plugins/analysis-ik/config/custom_dict.txt
-      - /data/htdoc/docker-lnmp/tool/es/config/synonym/custom_dict.txt:/usr/share/elasticsearch/config/synonym/custom_dict.txt
+      - /data/htdocs/docker-lnmp/tool/es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - /data/htdocs/docker-lnmp/tool/es/config/ik/IKAnalyzer.cfg.xml:/usr/share/elasticsearch/plugins/analysis-ik/config/IKAnalyzer.cfg.xml
+      - /data/htdocs/docker-lnmp/tool/es/config/ik/custom_dict.txt:/usr/share/elasticsearch/plugins/analysis-ik/config/custom_dict.txt
+      - /data/htdocs/docker-lnmp/tool/es/config/synonym/custom_dict.txt:/usr/share/elasticsearch/config/synonym/custom_dict.txt
     ports:
       - 9200:9200
       - 9300:9300
@@ -44,10 +44,10 @@ services:
         hard: -1
     volumes:
       - es7data02:/usr/share/elasticsearch/data
-      - /data/htdoc/docker-lnmp/tool/es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - /data/htdoc/docker-lnmp/tool/es/config/ik/IKAnalyzer.cfg.xml:/usr/share/elasticsearch/plugins/analysis-ik/config/IKAnalyzer.cfg.xml
-      - /data/htdoc/docker-lnmp/tool/es/config/ik/custom_dict.txt:/usr/share/elasticsearch/plugins/analysis-ik/config/custom_dict.txt
-      - /data/htdoc/docker-lnmp/tool/es/config/synonym/custom_dict.txt:/usr/share/elasticsearch/config/synonym/custom_dict.txt
+      - /data/htdocs/docker-lnmp/tool/es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - /data/htdocs/docker-lnmp/tool/es/config/ik/IKAnalyzer.cfg.xml:/usr/share/elasticsearch/plugins/analysis-ik/config/IKAnalyzer.cfg.xml
+      - /data/htdocs/docker-lnmp/tool/es/config/ik/custom_dict.txt:/usr/share/elasticsearch/plugins/analysis-ik/config/custom_dict.txt
+      - /data/htdocs/docker-lnmp/tool/es/config/synonym/custom_dict.txt:/usr/share/elasticsearch/config/synonym/custom_dict.txt
     ports:
       - 9201:9200
       - 9301:9300
