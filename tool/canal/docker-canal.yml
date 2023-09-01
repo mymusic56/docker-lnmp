@@ -1,26 +1,25 @@
 version: "3"
 services:
   canal-server:
-    image: canal/canal-server:v1.1.4
+    image: canal/canal-server:v1.1.6
     container_name: canal-server
     volumes:
-      - /data/var/log/canal-server:/home/admin/canal-server/logs
+      - /var/canal-server/logs/:/home/admin/canal-server/logs/
     environment:
-      - canal.auto.scan=false
       - canal.destinations=test
       ## mysql serverId
       - canal.instance.mysql.slaveId=1234
       #username/password，需要改成自己的数据库信息
       - canal.instance.dbUsername=canal
       - canal.instance.dbPassword=123456
-      - canal.instance.tsdb.enable=true
+      - canal.instance.tsdb.enable=false
       - canal.instance.connectionCharset=UTF-8
-      - canal.instance.gtidon=false
-      - canal.instance.filter.regex=.*\\..*
+      - canal.instance.gtidon=true
+      - canal.instance.filter.regex=.*\..*
       ##position info，需要改成自己的数据库信息， 不指定任何信息：默认从当前数据库的位点，进行启动
-      - canal.instance.master.address=mysql5.6:3306
-      - canal.instance.master.journal.name=mysql-bin.000054
-      - canal.instance.master.position=4286
+      - canal.instance.master.address=mysql5.7:3306
+#      - canal.instance.master.journal.name=mysql-bin.000009
+#      - canal.instance.master.position=42525
       #      - canal.instance.master.timestamp=
       #      - canal.instance.standby.address=
       #      - canal.instance.standby.journal.name=
@@ -28,6 +27,8 @@ services:
       #      - canal.instance.standby.timestamp=
       #admin管理指令链接的ACL配置 (v1.1.4新增)
       # 使用时提示：Missing request header 'user' for method parameter of type String？？
+      # 自动注册到canal-admin,有时候成功，有时候失败奇怪？？
+#      - canal.register.ip=
 #      - canal.admin.manager=canal-admin:8089
 #      - canal.admin.port=11110
 #      - canal.admin.user=admin
@@ -35,6 +36,24 @@ services:
       # admin auto register
 #      - canal.admin.register.auto=true
 #      - canal.admin.register.cluster=
+      # MQ Config
+      - canal.serverMode=rabbitmq
+      # Canal的batch size, 默认50K, 由于kafka最大消息体限制请勿超过1M(900K以下)
+      - canal.mq.canalBatchSize=50
+      - canal.mq.canalGetTimeout=100
+      # 是否为flat json格式对象
+      - canal.mq.flatMessage=true
+      - canal.mq.topic=canal.test
+      - canal.mq.topic=example.ampq.canal
+      # 针对库名或者表名发送动态topic
+#      - canal.mq.dynamicTopic=mytest,.*,mytest.user,mytest\\..*,.*\\..*
+      - rabbitmq.host=rabbit3.8.9:5672
+      - rabbitmq.virtual.host=/test_vhost
+      - rabbitmq.exchange=canal_exchange
+      - rabbitmq.username=guest
+      - rabbitmq.password=guest
+      # 持久化消息
+      - rabbitmq.deliveryMode=2
     ports:
       - 9100:9100
       - 11110:11110
@@ -46,27 +65,34 @@ services:
     deploy:
       resources:
         limits:
-          memory: 4096m
+          memory: 1024m
+    networks:
+      - my_cluster
   canal-admin:
-    image: canal/canal-admin:v1.1.4
+    image: canal/canal-admin:v1.1.6
     container_name: canal-admin
     volumes:
-      - /data/var/log/canal-admin:/home/admin/canal-admin/logs
+      - /var/canal-admin/logs/:/home/admin/canal-admin/logs/
     environment:
       - server.port=8089
-      - spring.datasource.address=mysql5.6:3306
+      - spring.datasource.address=mysql5.7:3306
       - spring.datasource.database=canal_manager
       - spring.datasource.username=root
       - spring.datasource.password=123456
+      - spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+      - spring.datasource.url=jdbc:mysql://mysql5.7:3306/canal_manager?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      - spring.datasource.hikari.maximum-pool-size=30
+      - spring.datasource.hikari.minimum-idle=1
       - canal.adminUser=admin
-      - canal.adminPasswd=123456
+      - canal.adminPasswd=admin
     ports:
       - 8089:8089
     deploy:
       resources:
         limits:
-          memory: 4096m
+          memory: 512m
+    networks:
+      - my_cluster
 networks:
-  default:
-    external:
-      name: conf_default
+  my_cluster:
+    external: true

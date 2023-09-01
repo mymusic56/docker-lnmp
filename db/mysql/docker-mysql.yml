@@ -14,7 +14,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "123456"
     networks:
-      - esnet
+      - my_cluster
   mysql-slave:
     image: mysql:5.7.37
     container_name: mysql5.7-slave
@@ -29,7 +29,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "123456"
     networks:
-      - esnet
+      - my_cluster
 networks:
-  esnet:
-    driver: bridge
+  my_cluster:
+    external: true
