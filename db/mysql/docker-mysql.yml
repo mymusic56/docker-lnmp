@@ -30,6 +30,21 @@ services:
       MYSQL_ROOT_PASSWORD: "123456"
     networks:
       - my_cluster
+  mysql-test:
+    image: mysql:5.7.37
+    container_name: mysql5.7-test
+    ports:
+      - "3309:3306"
+    volumes:
+      - /data/htdocs/docker-lnmp/db/mysql/my.57-test.cnf:/etc/mysql/my.cnf:ro
+      - /var/mysql5.7-test/data:/var/lib/mysql/:rw
+      - /var/log/mysql5.7-test/:/var/log/mysql/:rw
+      - /var/mysql5.7-test/mysql-files/:/var/lib/mysql-files:rw
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+    networks:
+      - my_cluster
 networks:
   my_cluster:
     external: true

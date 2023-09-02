@@ -12,6 +12,20 @@ MySQL、RabbitMQ
 ## 启动
 ```
 docker run -it --rm \
+    -e server.port=8089 \
+    -e spring.datasource.address=mysql5.7:3306 \
+    -e spring.datasource.database=canal_manager \
+    -e spring.datasource.username=root \
+    -e spring.datasource.password=123456 \
+    -e canal.adminUser=admin \
+    -e canal.adminPasswd=123456 \
+    -v /var/canal-admin/logs/:/home/admin/canal-admin/logs/ \
+    --name=canal-admin \
+    --net=my_cluster \
+    -p 8089:8089 \
+    canal/canal-admin:v1.1.6
+
+docker run -it --rm \
     -e canal.destinations=test \
     -e canal.instance.master.address=mysql5.7:3306 \
     -e canal.instance.dbUsername=canal \
@@ -20,6 +34,11 @@ docker run -it --rm \
     -e canal.instance.tsdb.enable=false \
     -e canal.instance.gtidon=true \
     -e canal.instance.filter.regex=.*\..* \
+    -e canal.admin.manager=canal-admin:8089 \
+    -e canal.admin.port=11110 \
+    -e canal.admin.user=admin \
+    -e canal.admin.passwd=6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9 \
+    -e canal.admin.register.auto=true \
     -v /var/canal-server/logs/:/home/admin/canal-server/logs/ \
     --name=canal-server \
     --net=my_cluster \
