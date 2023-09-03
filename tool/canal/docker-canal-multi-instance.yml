@@ -43,7 +43,7 @@ services:
       - canal.admin.user=admin
       - canal.admin.passwd=6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9
       # admin auto register
-      - canal.admin.register.auto=true
+#      - canal.admin.register.auto=true
 #      - canal.admin.register.cluster=
       # MQ Config
       - canal.serverMode=rabbitmq

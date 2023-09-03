@@ -4,7 +4,7 @@ https://github.com/alibaba/canal/blob/master/docker/run.sh
 
 ## 依赖
 
-MySQL、RabbitMQ
+MySQL、RabbitMQ、Zookeeper
 
 ## canal-admin SQL初始化
 参见 conf/canal-admin/canal_manager.sql

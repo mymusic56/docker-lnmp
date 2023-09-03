@@ -1,0 +1,56 @@
+version: "3"
+services:
+  canal-server-1:
+    image: canal/canal-server:v1.1.6
+    container_name: canal-server-1
+    volumes:
+      - /var/canal-server-1/logs/:/home/admin/canal-server/logs/
+    environment:
+      # 公共配置可以放到环境变量中
+      - canal.zkServers=zookeeper:2181
+      - canal.instance.global.spring.xml=classpath:spring/default-instance.xml
+      # table meta tsdb info
+      - canal.instance.tsdb.enable=false
+      - canal.admin.manager=canal-admin:8089
+      - canal.admin.port=11110
+      - canal.admin.user=admin
+      - canal.admin.passwd=6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9
+      - canal.admin.register.auto=true
+      - canal.admin.register.cluster=canal_cluster
+    ports:
+      - 9100:9100
+      - 11110:11110
+      - 11111:11111
+      - 11112:11112
+    restart: always
+    networks:
+      - my_cluster
+  canal-server-2:
+    image: canal/canal-server:v1.1.6
+    container_name: canal-server-2
+    volumes:
+      - /var/canal-server-2/logs/:/home/admin/canal-server/logs/
+    environment:
+      # 公共配置可以放到环境变量中
+      - canal.zkServers=zookeeper:2181
+      - canal.instance.global.spring.xml=classpath:spring/default-instance.xml
+      # table meta tsdb info
+      - canal.instance.tsdb.enable=false
+      # 自动注册
+      - canal.admin.manager=canal-admin:8089
+      - canal.admin.port=11110
+      - canal.admin.user=admin
+      - canal.admin.passwd=6BB4837EB74329105EE4568DDA7DC67ED2CA2AD9
+      - canal.admin.register.auto=true
+      - canal.admin.register.cluster=canal_cluster
+    ports:
+      - 29100:9100
+      - 21110:11110
+      - 21111:11111
+      - 21112:11112
+    restart: always
+    networks:
+      - my_cluster
+networks:
+  my_cluster:
+    external: true
