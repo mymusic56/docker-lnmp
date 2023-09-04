@@ -32,4 +32,4 @@ scrape_configs:
   - job_name: 'rabbitmq'
     metrics_path: '/metrics'
     static_configs:
-      - targets: ["canal-server-1:11112","canal-server-2:11112"]
+      - targets: ["rabbit3.8.9:15692"]
