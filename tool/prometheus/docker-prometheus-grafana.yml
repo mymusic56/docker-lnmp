@@ -1,0 +1,48 @@
+version: "3"
+services:
+  prometheus:
+    image: bitnami/prometheus:2.45.0
+    container_name: prometheus
+    volumes:
+      - /var/prometheus:/opt/bitnami/prometheus/data
+      - /data/htdocs/docker-lnmp/tool/prometheus/prometheus.yml:/opt/bitnami/prometheus/conf/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - my_cluster
+    # --web.enable-remote-write-receiver 用于接收Grafana Agent写入的指标数据
+    command: --web.enable-remote-write-receiver --config.file=/opt/bitnami/prometheus/conf/prometheus.yml
+
+  #  prometheus-gateway:
+  #    image: prom/pushgateway:v1.5.1
+  #    container_name: prometheus-gateway
+  #    ports:
+  #      - "9091:9091"
+  #    networks:
+  #      - my_cluster
+  grafana:
+    image: grafana/grafana:9.5.8
+    container_name: grafana
+    volumes:
+      - /var/log/grafana:/var/log/grafana
+      - /var/grafana:/var/lib/grafana
+      - /data/htdocs/docker-lnmp/tool/prometheus/grafana.ini:/etc/grafana/grafana.ini
+    environment:
+      - GF_TIMEZONE=Asia/Shanghai
+      - GF_PATHS_LOGS=/var/lib/grafana
+      - GF_LOG_MODE=console file
+    ports:
+      - "3000:3000"
+    networks:
+      - my_cluster
+#  grafana-agent:
+#    image: grafana/agent:v0.35.4
+#    container_name: grafana-agent
+#    volumes:
+#      - /var/grafana-agent/data:/etc/agent/data
+#      - /data/htdocs/docker-lnmp/tool/prometheus/grafana-agent.yaml:/etc/agent/agent.yaml
+#    networks:
+#      - my_cluster
+networks:
+  my_cluster:
+    external: true

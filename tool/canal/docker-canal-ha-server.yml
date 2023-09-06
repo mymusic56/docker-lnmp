@@ -22,7 +22,6 @@ services:
       - 11110:11110
       - 11111:11111
       - 11112:11112
-    restart: always
     networks:
       - my_cluster
   canal-server-2:
@@ -48,7 +47,6 @@ services:
       - 21110:11110
       - 21111:11111
       - 21112:11112
-    restart: always
     networks:
       - my_cluster
 networks:
