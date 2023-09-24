@@ -1,0 +1,31 @@
+version: '3'
+services:
+  rmq-name-server:
+    image: apache/rocketmq:4.9.4
+    container_name: rmq-name-server
+    ports:
+      - "9876:9876"
+    volumes:
+      - /var/log/rmq-name-server:/home/rocketmq/logs
+    command: sh mqnamesrv
+    networks:
+      - my_cluster
+  rmq-broker:
+    image: apache/rocketmq:4.9.4
+    container_name: rmq-broker
+    ports:
+      - "10909:10909"
+      - "10911:10911"
+      - "10912:10912"
+    volumes:
+      - /var/log/rmq-broker:/home/rocketmq/logs
+      - /var/data/rmq-broker/store:/home/rocketmq/store
+      - /data/htdocs/docker-lnmp/queue/rocketmq/broker.conf:/home/rocketmq/rocketmq-4.9.4/conf/broker.conf
+    command: sh mqbroker -n rmq-name-server:9876 -c /home/rocketmq/rocketmq-4.9.4/conf/broker.conf
+    depends_on:
+      - rmq-name-server
+    networks:
+      - my_cluster
+networks:
+  my_cluster:
+    external: true
