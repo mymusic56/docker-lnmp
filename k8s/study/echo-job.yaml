@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: echo-job
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - image: nginx:1.14.2
+        name: echo-job
+        command: ["/bin/echo"]
+        args: ["hello", "world"]

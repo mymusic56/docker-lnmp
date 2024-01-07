@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: cm-maria
+data:
+  DATABASE: 'wordpress'
+  USER: 'wordpress'
+  PASSWORD: '123456'
+  ROOT_PASSWORD: '123456'

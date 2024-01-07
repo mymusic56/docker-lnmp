@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  wordpress:
+    image: wordpress:5
+    container_name: wordpress
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: mysql5.6
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: 123456
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - /data/htdocs/worpress5:/var/www/html
+networks:
+  default:
+    external:
+      name: conf_default
